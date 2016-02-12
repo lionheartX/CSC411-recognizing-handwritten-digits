@@ -27,7 +27,6 @@ def check_grad(func, X, epsilon, *args):
         raise ValueError("X must be a vector")
 
     y, dy, = func(X, *args)[:2]         # get the partial derivatives dy
-
     dh = np.zeros((len(X), 1))
 
     for j in xrange(len(X)):
@@ -37,8 +36,8 @@ def check_grad(func, X, epsilon, *args):
         dx = -dx
         y1 = func(X+dx, *args)[0]
         dh[j] = (y2 - y1)/(2*epsilon)
-
-    print np.hstack((dy, dh))          # print the two vectors
+    
+    #print np.hstack((dy, dh))          # print the two vectors
     d = LA.norm(dh-dy)/LA.norm(dh+dy)  # return norm of diff divided by norm of sum
 
     return d

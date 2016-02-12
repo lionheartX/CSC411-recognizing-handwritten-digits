@@ -50,14 +50,14 @@ if __name__ == '__main__':
     ks = [1, 3, 5, 7, 9]
     for k in ks:
         valid_labels = run_knn(k, train_inputs, train_targets, valid_inputs)
-        num_mismatches = np.sum(np.logical_xor(valid_labels, valid_targets))
+        num_incorrect = np.sum(np.logical_xor(valid_labels, valid_targets))
         # since the output is either 1 or 0, we can simply xor
-        # print num_mismatches
-        classification_rate = 1.0 - num_mismatches / (num_valid * 1.0)
+        classification_rate = 1.0 - num_incorrect / (num_valid * 1.0)
         classification_rates_list.append(classification_rate)
         
-    pyplot.title("kNN classification rate") 
+    pyplot.title("2.1 - kNN classification rate") 
     pyplot.xlabel("k")
     pyplot.ylabel("classification rate")
     pyplot.plot(ks, classification_rates_list)
     pyplot.show()
+    

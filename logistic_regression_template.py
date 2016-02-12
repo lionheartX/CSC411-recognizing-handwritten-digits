@@ -2,29 +2,31 @@ import numpy as np
 from check_grad import check_grad
 from utils import *
 from logistic import *
+import matplotlib.pyplot as pyplot
 
 def run_logistic_regression():
     train_inputs, train_targets = load_train()
     #train_inputs, train_targets = load_train_small()
     valid_inputs, valid_targets = load_valid()
+    #valid_inputs, valid_targets = load_test()
 
     N, M = train_inputs.shape
 
-    # TODO: Set hyperparameters
     hyperparameters = {
-                    'learning_rate': ...,
-                    'weight_regularization': ...,
-                    'num_iterations': ...
+                    'learning_rate': 0.01,
+                    'weight_regularization': 0.1,
+                    'num_iterations': 1000
                  }
 
     # Logistic regression weights
     # TODO:Initialize to random weights here.
-    weights = ...
+    weights = np.random.randn(M + 1, 1) /10
 
     # Verify that your logistic function produces the right gradient.
     # diff should be very close to 0.
     run_check_grad(hyperparameters)
-
+    ce_train = []
+    ce_valid = []
 
     # Begin learning with gradient descent
     for t in xrange(hyperparameters['num_iterations']):
@@ -54,6 +56,16 @@ def run_logistic_regression():
                "TRAIN FRAC:{:2.2f}  VALID CE:{:.6f}  VALID FRAC:{:2.2f}").format(
                    t+1, f / N, cross_entropy_train, frac_correct_train*100,
                    cross_entropy_valid, frac_correct_valid*100)
+        ce_train.append(cross_entropy_train)
+        ce_valid.append(cross_entropy_valid)   
+          
+    pyplot.title("Logistic Regression with mnist_train")
+    pyplot.xlabel("Training Iteration")
+    pyplot.ylabel("Cross Entropy")
+    pyplot.plot(xrange(1, hyperparameters['num_iterations'] + 1), ce_train, label = "training cross entropy")
+    pyplot.plot(xrange(1, hyperparameters['num_iterations'] + 1), ce_valid, label = "validation cross entropy")
+    pyplot.legend()
+    pyplot.show()
 
 def run_check_grad(hyperparameters):
     """Performs gradient check on logistic function.
@@ -75,7 +87,7 @@ def run_check_grad(hyperparameters):
                       targets,
                       hyperparameters)
 
-    print "diff =", diff
+    #print "diff =", diff
 
 if __name__ == '__main__':
     run_logistic_regression()
